@@ -9,8 +9,12 @@ if PY3:
         logger.debug("Encode str {} with and errors {}".format(value, encoding, errors))
         return str(value, encoding, errors)
 
-    def str_decode(value='', encoding=None, errors='strict'):
-        return bytes(value, encoding, errors).decode('utf-8')
+    if isinstance(value, str):
+            return bytes(value, encoding, errors).decode('utf-8')
+        elif isinstance(value, bytes):
+            return value.decode('utf-8', errors=errors)
+        else:
+            raise TypeError( "Cannot decode '{}' object".format(value.__class__) )
 else:
     def str_encode(string='', encoding=None, errors='strict'):
         return unicode(string, encoding, errors)
